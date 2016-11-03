@@ -1,93 +1,32 @@
 <?php
+    require_once "includes/dom.php";
     require_once "includes/recaptchalib.php";
     require_once "includes/config.php";
-  foreach ($_POST as $key => $value) {
-    echo '<p><strong>' . $key.':</strong> '.$value.'</p>';
-  }
-
-  $response = null;
-  $reCaptcha = new ReCaptcha($secret);
-  // if submitted check response
-  if ($_POST["g-recaptcha-response"]) {
-      $response = $reCaptcha->verifyResponse(
-          $_SERVER["REMOTE_ADDR"],
-          $_POST["g-recaptcha-response"]
-      );
-  }
-
-/*
-  if ($response != null && $response->success) {
-    echo "Validated.";
-  } else {
-      echo "Captcha wasnt clicked";
-  }
-*/
-
+    require_once "includes/functions.php";
+    require_once "includes/captchavalidation.php";
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
   <head>
-      <script src="js/sweetalert.min.js"></script>
-      <link rel="stylesheet" type="text/css" href="css/sweetalert.css">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <title>How to Integrate Google “No CAPTCHA reCAPTCHA” on Your Website</title>
   </head>
 
   <body>
+      <form id="formtest" method="post" action="includes/captchaverify.php">
+            <label for="name">Name:</label>
+            <input name="name" required><br />
+            <label for="email">Email:</label>
+            <input name="email" type="email" required><br />
 
+            <div class="g-recaptcha" data-sitekey="6LddmRwTAAAAAN0MHGZjUYzxY95LTgVF48bjqtlM" data-callback="solved"></div>
 
+            <button type="submit" id="submitcaptcha">Abschicken</button>
+      </form>
 
-      <!-- Disable Submit Button
-      <script type="text/JavaScript">
-      document.addEventListener('load', function() {
-        document.getElementById('submitcaptcha').setAttributeNode('disabled');
+      <!--js-->
+      <script src='https://www.google.com/recaptcha/api.js'></script>
 
-      });
-      </script>
-
--->
-
-      <!-- Enable Submit Button (Func)
-      <script type="text/JavaScript">
-        function enableBtn(){
-            document.getElementById("submitcaptcha").removeAttribute("disabled");
-        }
-      </script>
-  -->
-
-
-      <!-- Testing around with Captcha Check -->
-<script type="text/JavaScript">
-function checkre() {
-            var googleResponse = jQuery('#g-recaptcha-response').val();
-        if (!googleResponse) {
-            $('<p style="color:red !important" class=error-captcha"><span class="glyphicon glyphicon-remove " ></span> Please fill up the captcha.</p>" ').insertAfter("#html_element");
-            return false;
-        } else {
-
-            return true;
-        }
-}
-</script>
-
-    <form id="formtest" action="" method="post" onsubmit="checkre()">
-      <label for="name">Name:</label>
-      <input name="name" required><br />
-
-      <label for="email">Email:</label>
-      <input name="email" type="email" required><br />
-
-	  <!-- Insert your Public Key inside the data-sitekey -->
-      <div class="g-recaptcha" data-sitekey="" data-callback="enableBtn"></div>
-
-      <button type="submit" id="submitcaptcha">Abschicken</button>
-
-    </form>
-
-    <!--js-->
-    <script src='https://www.google.com/recaptcha/api.js'></script>
-
-  </body>
-</html>
+      </body>
+ </html>
