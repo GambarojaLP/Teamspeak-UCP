@@ -20,7 +20,7 @@
             <label for="email">Email:</label>
             <input name="email" type="email" required><br />
 
-            <div class="g-recaptcha" data-sitekey="6LddmRwTAAAAAN0MHGZjUYzxY95LTgVF48bjqtlM" data-callback="solved"></div>
+            <div class="g-recaptcha" data-sitekey="" data-callback="solved"></div>
 
             <button type="submit" id="submitcaptcha">Abschicken</button>
       </form>
