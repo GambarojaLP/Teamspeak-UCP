@@ -1,5 +1,8 @@
 <?php
+require_once "includes/dom.php";
 require_once "includes/recaptchalib.php";
+require_once "includes/cpt-config.php";
+require_once "includes/cpt-msg.php";
 include_once 'includes/db_connect.php';
 include_once 'includes/functions.php';
 
@@ -14,6 +17,7 @@ if (login_check($mysqli) == true) {
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <title>Secure Login: Log In</title>
         <link rel="stylesheet" href="styles/main.css" />
         <script src='https://www.google.com/recaptcha/api.js'></script>
@@ -34,7 +38,7 @@ if (login_check($mysqli) == true) {
             <input type="button"
                    value="Login"
                    onclick="formhash(this.form, this.form.password);" />
-            <div class="g-recaptcha" data-sitekey="6LddmRwTAAAAAN0MHGZjUYzxY95LTgVF48bjqtlM"></div>
+            <div class="g-recaptcha" data-sitekey=<?php echo $publickey ?>'></div>
         </form>
         <p>If you don't have a login, please <a href="register.php">register</a></p>
         <p>If you are done, please <a href="includes/logout.php">log out</a>.</p>

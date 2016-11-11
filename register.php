@@ -1,4 +1,8 @@
 <?php
+require_once "includes/dom.php";
+require_once "includes/recaptchalib.php";
+require_once "includes/cpt-config.php";
+require_once "includes/cpt-msg.php";
 include_once 'includes/register.inc.php';
 include_once 'includes/functions.php';
 ?>
@@ -53,6 +57,8 @@ include_once 'includes/functions.php';
                                    this.form.email,
                                    this.form.password,
                                    this.form.confirmpwd);" />
+
+            <div class="g-recaptcha" data-sitekey='<?php echo $publickey ?>'></div>
         </form>
         <p>Return to the <a href="index.php">login page</a>.</p>
     </body>
