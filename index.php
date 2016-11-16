@@ -8,7 +8,8 @@ include_once 'includes/functions.php';
 
 // Dies ist eine Test-Nachricht
 // Can you see this?
-// Test 3 
+// Test 3
+// TEST 4 OH MA GOSH
 
 sec_session_start();
 
