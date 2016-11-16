@@ -6,6 +6,9 @@ require_once "includes/cpt-msg.php";
 include_once 'includes/db_connect.php';
 include_once 'includes/functions.php';
 
+// Dies ist eine Test-Nachricht
+// Can you see this?
+
 sec_session_start();
 
 if (login_check($mysqli) == true) {
