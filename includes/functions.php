@@ -1,22 +1,24 @@
 <?php
+
 include_once 'psl-config.php';
 $mysqli = new mysqli(HOST, USER, PASSWORD, DATABASE, PORT);
 
-function sec_session_start() {
+function sec_session_start()
+{
     $session_name = 'sec_session_id';   // vergib einen Sessionnamen
     $secure = SECURE;
     // Damit wird verhindert, dass JavaScript auf die session id zugreifen kann.
     $httponly = true;
     // Zwingt die Sessions nur Cookies zu benutzen.
-    if (ini_set('session.use_only_cookies', 1) === FALSE) {
-        header("Location: ../error.php?err=Could not initiate a safe session (ini_set)");
+    if (ini_set('session.use_only_cookies', 1) === false) {
+        header('Location: ../error.php?err=Could not initiate a safe session (ini_set)');
         exit();
     }
     // Holt Cookie-Parameter.
     $cookieParams = session_get_cookie_params();
-    session_set_cookie_params($cookieParams["lifetime"],
-        $cookieParams["path"],
-        $cookieParams["domain"],
+    session_set_cookie_params($cookieParams['lifetime'],
+        $cookieParams['path'],
+        $cookieParams['domain'],
         $secure,
         $httponly);
     // Setzt den Session-Name zu oben angegebenem.
@@ -25,12 +27,13 @@ function sec_session_start() {
     session_regenerate_id();    // Erneuert die Session, löscht die alte.
 }
 
-function login($email, $password, $mysqli) {
+function login($email, $password, $mysqli)
+{
     // Das Benutzen vorbereiteter Statements verhindert SQL-Injektion.
-    if ($stmt = $mysqli->prepare("SELECT id, username, password, salt
+    if ($stmt = $mysqli->prepare('SELECT id, username, password, salt
         FROM members
        WHERE email = ?
-        LIMIT 1")) {
+        LIMIT 1')) {
         $stmt->bind_param('s', $email);  // Bind "$email" to parameter.
         $stmt->execute();    // Führe die vorbereitete Anfrage aus.
         $stmt->store_result();
@@ -40,7 +43,7 @@ function login($email, $password, $mysqli) {
         $stmt->fetch();
 
         // hash das Passwort mit dem eindeutigen salt.
-        $password = hash('sha512', $password . $salt);
+        $password = hash('sha512', $password.$salt);
         if ($stmt->num_rows == 1) {
             // Wenn es den Benutzer gibt, dann wird überprüft ob das Konto
             // blockiert ist durch zu viele Login-Versuche
@@ -57,15 +60,15 @@ function login($email, $password, $mysqli) {
                     // Hole den user-agent string des Benutzers.
                     $user_browser = $_SERVER['HTTP_USER_AGENT'];
                     // XSS-Schutz, denn eventuell wir der Wert gedruckt
-                    $user_id = preg_replace("/[^0-9]+/", "", $user_id);
+                    $user_id = preg_replace('/[^0-9]+/', '', $user_id);
                     $_SESSION['user_id'] = $user_id;
                     // XSS-Schutz, denn eventuell wir der Wert gedruckt
                     $username = preg_replace("/[^a-zA-Z0-9_\-]+/",
-                                                                "",
+                                                                '',
                                                                 $username);
                     $_SESSION['username'] = $username;
                     $_SESSION['login_string'] = hash('sha512',
-                              $password . $user_browser);
+                              $password.$user_browser);
                     // Login erfolgreich.
                     return true;
                 } else {
@@ -74,6 +77,7 @@ function login($email, $password, $mysqli) {
                     $now = time();
                     $mysqli->query("INSERT INTO login_attempts(user_id, time)
                                     VALUES ('$user_id', '$now')");
+
                     return false;
                 }
             }
@@ -84,7 +88,8 @@ function login($email, $password, $mysqli) {
     }
 }
 
-function checkbrute($user_id, $mysqli) {
+function checkbrute($user_id, $mysqli)
+{
     // Hole den aktuellen Zeitstempel
     $now = time();
 
@@ -110,12 +115,12 @@ function checkbrute($user_id, $mysqli) {
     }
 }
 
-function login_check($mysqli) {
+function login_check($mysqli)
+{
     // Überprüfe, ob alle Session-Variablen gesetzt sind
     if (isset($_SESSION['user_id'],
                         $_SESSION['username'],
                         $_SESSION['login_string'])) {
-
         $user_id = $_SESSION['user_id'];
         $login_string = $_SESSION['login_string'];
         $username = $_SESSION['username'];
@@ -123,9 +128,9 @@ function login_check($mysqli) {
         // Hole den user-agent string des Benutzers.
         $user_browser = $_SERVER['HTTP_USER_AGENT'];
 
-        if ($stmt = $mysqli->prepare("SELECT password
+        if ($stmt = $mysqli->prepare('SELECT password
                                       FROM members
-                                      WHERE id = ? LIMIT 1")) {
+                                      WHERE id = ? LIMIT 1')) {
             // Bind "$user_id" zum Parameter.
             $stmt->bind_param('i', $user_id);
             $stmt->execute();   // Execute the prepared query.
@@ -135,7 +140,7 @@ function login_check($mysqli) {
                 // Wenn es den Benutzer gibt, hole die Variablen von result.
                 $stmt->bind_result($password);
                 $stmt->fetch();
-                $login_check = hash('sha512', $password . $user_browser);
+                $login_check = hash('sha512', $password.$user_browser);
 
                 if ($login_check == $login_string) {
                     // Eingeloggt!!!!
@@ -158,8 +163,8 @@ function login_check($mysqli) {
     }
 }
 
-function esc_url($url) {
-
+function esc_url($url)
+{
     if ('' == $url) {
         return $url;
     }
@@ -188,4 +193,3 @@ function esc_url($url) {
         return $url;
     }
 }
-?>

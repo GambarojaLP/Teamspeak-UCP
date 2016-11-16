@@ -1,8 +1,8 @@
 <?php
-require_once "includes/dom.php";
-require_once "includes/recaptchalib.php";
-require_once "includes/cpt-config.php";
-require_once "includes/cpt-msg.php";
+require_once 'includes/dom.php';
+require_once 'includes/recaptchalib.php';
+require_once 'includes/cpt-config.php';
+require_once 'includes/cpt-msg.php';
 include_once 'includes/register.inc.php';
 include_once 'includes/functions.php';
 ?>

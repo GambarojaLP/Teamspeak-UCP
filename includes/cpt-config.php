@@ -1,4 +1,4 @@
 <?php
-$publickey = "";
-$secret = "";
-?>
+
+$publickey = '';
+$secret = '';

@@ -1,8 +1,9 @@
 <?php
+
 include_once 'db_connect.php';
 include_once 'psl-config.php';
 
-$error_msg = "";
+$error_msg = '';
 
 if (isset($_POST['username'], $_POST['email'], $_POST['p'])) {
     // Bereinige und überprüfe die Daten
@@ -24,9 +25,8 @@ if (isset($_POST['username'], $_POST['email'], $_POST['p'])) {
     // Benutzername und Passwort wurde auf der Benutzer-Seite schon überprüft.
     // Das sollte genügen, denn niemand hat einen Vorteil, wenn diese Regeln
     // verletzt werden.
-    //
 
-    $prep_stmt = "SELECT id FROM members WHERE email = ? LIMIT 1";
+    $prep_stmt = 'SELECT id FROM members WHERE email = ? LIMIT 1';
     $stmt = $mysqli->prepare($prep_stmt);
 
     if ($stmt) {
@@ -49,16 +49,16 @@ if (isset($_POST['username'], $_POST['email'], $_POST['p'])) {
 
     if (empty($error_msg)) {
         // Erstelle ein zufälliges Salt
-        $random_salt = hash('sha512', uniqid(openssl_random_pseudo_bytes(16), TRUE));
+        $random_salt = hash('sha512', uniqid(openssl_random_pseudo_bytes(16), true));
 
         // Erstelle saltet Passwort
-        $password = hash('sha512', $password . $random_salt);
+        $password = hash('sha512', $password.$random_salt);
 
         // Trage den neuen Benutzer in die Datenbank ein
-        if ($insert_stmt = $mysqli->prepare("INSERT INTO members (username, email, password, salt) VALUES (?, ?, ?, ?)")) {
+        if ($insert_stmt = $mysqli->prepare('INSERT INTO members (username, email, password, salt) VALUES (?, ?, ?, ?)')) {
             $insert_stmt->bind_param('ssss', $username, $email, $password, $random_salt);
             // Führe die vorbereitete Anfrage aus.
-            if (! $insert_stmt->execute()) {
+            if (!$insert_stmt->execute()) {
                 header('Location: ../error.php?err=Registration failure: INSERT');
             }
         }
