@@ -8,6 +8,7 @@ include_once 'includes/functions.php';
 
 // Dies ist eine Test-Nachricht
 // Can you see this?
+// Test 3 
 
 sec_session_start();
 
