@@ -1,5 +1,7 @@
 <?php
 
+// Test Atom Connection 
+
 include_once 'db_connect.php';
 include_once 'psl-config.php';
 
